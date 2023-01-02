@@ -70,6 +70,16 @@ genimage \
 	--outputpath "${BINARIES_DIR}" \
 	--config "${GENIMAGE_SDCARD_CFG}"
 
+eval $(grep BR2_PACKAGE_RPI_EEPROM_PUBLIC_KEY "${BR2_CONFIG}")
+PUBLIC_KEY=""
+if [ -f "${BR2_PACKAGE_RPI_EEPROM_PUBLIC_KEY}" ]; then
+   PUBLIC_KEY="${BR2_PACKAGE_RPI_EEPROM_PUBLIC_KEY}"
+else
+   # If the private key file is not found then the build will fail
+   echo "No public key file found at BR2_PACKAGE_RPI_EEPROM_PUBLIC_KEY=${BR2_PACKAGE_RPI_EEPROM_PUBLIC_KEY}"
+   exit 1
+fi
+
 # Now package boot.img inside sdcard.img with a config.txt file to
 # select boot.img ramdisk loading if signed-boot is not enabled.
 # If secure-boot is not enabled then boot_ramdisk=1 should be set in both
