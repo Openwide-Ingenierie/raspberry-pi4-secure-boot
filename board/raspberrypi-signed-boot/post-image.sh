@@ -80,6 +80,12 @@ else
    exit 1
 fi
 
+# Create pieeprom.bin from pieeprom.original.bin and config.txt
+${HOST_DIR}/bin/rpi-eeprom-config -c ${BINARIES_DIR}/boot.conf -p ${PUBLIC_KEY} -o ${BINARIES_DIR}/pieeprom.bin ${BINARIES_DIR}/pieeprom.original.bin
+
+# Generate signature for your eeprom
+${HOST_DIR}/bin/rpi-eeprom-digest -i ${BINARIES_DIR}/pieeprom.bin -o ${BINARIES_DIR}/pieeprom.sig
+
 # Now package boot.img inside sdcard.img with a config.txt file to
 # select boot.img ramdisk loading if signed-boot is not enabled.
 # If secure-boot is not enabled then boot_ramdisk=1 should be set in both
