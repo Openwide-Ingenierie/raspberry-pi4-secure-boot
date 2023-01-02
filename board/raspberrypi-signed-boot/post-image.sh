@@ -47,8 +47,12 @@ genimage \
 
 eval $(grep BR2_PACKAGE_RPI_EEPROM_PRIVATE_KEY "${BR2_CONFIG}")
 KEY_ARGS=""
-if [ -f "${CONFIG_DIR}/${BR2_PACKAGE_RPI_EEPROM_PRIVATE_KEY}" ]; then
-   KEY_ARGS="-k ${CONFIG_DIR}/${BR2_PACKAGE_RPI_EEPROM_PRIVATE_KEY}"
+if [ -f "${BR2_PACKAGE_RPI_EEPROM_PRIVATE_KEY}" ]; then
+   KEY_ARGS="-k ${BR2_PACKAGE_RPI_EEPROM_PRIVATE_KEY}"
+else
+   # If the private key file is not found then the build will fail
+   echo "No private key file found at ${BR2_PACKAGE_RPI_EEPROM_PRIVATE_KEY}"
+   exit 1
 fi
 rpi-eeprom-digest -i "${BINARIES_DIR}/boot.img" -o "${BINARIES_DIR}/boot.sig" ${KEY_ARGS}
 
