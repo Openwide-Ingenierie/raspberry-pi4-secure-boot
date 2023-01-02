@@ -7,6 +7,7 @@ BOARD_DIR="$(dirname $0)"
 BOARD_NAME="$(basename ${BOARD_DIR})"
 GENIMAGE_BOOT_CFG="${BOARD_DIR}/genimage-${BOARD_NAME}-boot.cfg"
 GENIMAGE_SDCARD_CFG="${BOARD_DIR}/genimage-${BOARD_NAME}-sdcard.cfg"
+GENIMAGE_RECOVERY_SDCARD_CFG="${BOARD_DIR}/genimage-${BOARD_NAME}-recovery-sdcard.cfg"
 GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
 
 # Pass an empty rootpath. genimage makes a full copy of the given rootpath to
@@ -18,6 +19,7 @@ trap 'rm -rf "${ROOTPATH_TMP}"' EXIT
 ROOTPATH_TMP="$(mktemp -d)"
 
 rm -f "${BINARIES_DIR}/boot.vfat" "${BINARIES_DIR}/boot.sig" "${BINARIES_DIR}/sdcard.img"
+rm -f "${BINARIES_DIR}/recovery.vfat" "${BINARIES_DIR}/pieeprom.bin" "${BINARIES_DIR}/pieeprom.sig" "${BINARIES_DIR}/sdcard-recovery.img"
 
 # start.elf supports compressed 64-bit kernel images.
 if [ -f ${BINARIES_DIR}/Image ]; then
@@ -63,5 +65,17 @@ genimage \
 	--inputpath "${BINARIES_DIR}"  \
 	--outputpath "${BINARIES_DIR}" \
 	--config "${GENIMAGE_SDCARD_CFG}"
+
+# Now package boot.img inside sdcard.img with a config.txt file to
+# select boot.img ramdisk loading if signed-boot is not enabled.
+# If secure-boot is not enabled then boot_ramdisk=1 should be set in both
+# config.txt and tryboot.txt.
+rm -rf "${GENIMAGE_TMP}"
+genimage \
+	--rootpath "${ROOTPATH_TMP}"   \
+	--tmppath "${GENIMAGE_TMP}"    \
+	--inputpath "${BINARIES_DIR}"  \
+	--outputpath "${BINARIES_DIR}" \
+	--config "${GENIMAGE_RECOVERY_SDCARD_CFG}"
 
 exit $?
