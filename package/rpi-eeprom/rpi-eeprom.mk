@@ -9,6 +9,9 @@ RPI_EEPROM_SITE = $(call github,raspberrypi,rpi-eeprom,$(RPI_EEPROM_VERSION))
 RPI_EEPROM_LICENSE = BSD-3-Clause
 RPI_EEPROM_LICENSE_FILES = LICENSE
 
+RPI_EEPROM_DEPENDENCIES = libopenssl python3 python-pycryptodomex
+HOST_RPI_EEPROM_DEPENDENCIES = host-libopenssl host-python3 host-python-pycryptodomex
+
 HOST_RPI_EEPROM_INSTALL = YES
 RPI_EEPROM_INSTALL = YES
 
