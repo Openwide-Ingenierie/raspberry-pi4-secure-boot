@@ -1,6 +1,6 @@
-From 38b730c00f45abf324caf687b5b00662ff4252c2 Mon Sep 17 00:00:00 2001
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 2 Dec 2016 23:09:44 +0100
+From 3c22c4364175e915ef6b9d86c3bb76d44c2df511 Mon Sep 17 00:00:00 2001
+From: Ever ATILANO <ever.atilano@smile.fr>
+Date: Thu, 29 Dec 2022 18:26:51 +0100
 Subject: [PATCH] Makefile: allow passing CFLAGS/LDFLAGS
 
 This might be needed to pass some custom CFLAGS/LDFLAGS when building
@@ -15,16 +15,18 @@ Signed-off-by: Peter Seiderer <ps.report@gmx.net>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/Makefile b/Makefile
-index 822e714..875e717 100755
+index dc78cfe..19fe8f1 100755
 --- a/Makefile
 +++ b/Makefile
-@@ -1,5 +1,5 @@
- rpiboot: main.c msd/bootcode.h msd/start.h msd/bootcode4.h msd/start4.h
--	$(CC) -Wall -Wextra -g -o $@ $< -lusb-1.0
-+	$(CC) -Wall -Wextra -g $(CFLAGS) -o $@ $< -lusb-1.0 $(LDFLAGS)
- 
- %.h: %.bin ./bin2c
+@@ -10,7 +10,7 @@ rpiboot: main.c msd/bootcode.h msd/start.h msd/bootcode4.h msd/start4.h
  	./bin2c $< $@
+ 
+ bin2c: bin2c.c
+-	$(CC) -Wall -Wextra -g -o $@ $<
++	$(CC) -Wall -Wextra -g $(CFLAGS) -o $@ $< $(LDFLAGS)
+ 
+ install: rpiboot
+ 	install -m 755 rpiboot /usr/bin/
 -- 
-2.31.1
+2.25.1
 
