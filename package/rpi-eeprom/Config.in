@@ -19,6 +19,17 @@ config BR2_PACKAGE_RPI_EEPROM_PRIVATE_KEY
 	    be left unsigned but could be signed at a later date by running
 	    the scripts in usbboot/tools manually.
 
+config BR2_PACKAGE_RPI_EEPROM_PUBLIC_KEY
+	string "Public key"
+	default ""
+	depends on BR2_PACKAGE_RPI_EEPROM
+
+	help
+	    The filenmame of the RSA public key in PEM format that will be used
+	    to to save it in the internal eeprom. If this config is not defined then eeprom image will
+	    be left unsigned but could be signed at a later date by running
+	    the scripts in usbboot/tools manually.
+
 config BR2_PACKAGE_RPI_EEPROM_ADMIN_SSH_LOGIN
 	string "admin ssh authorized keys"
 	default ""
